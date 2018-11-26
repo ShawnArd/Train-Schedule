@@ -15,9 +15,7 @@ firebase.initializeApp(config)
   $("#add-train-btn").on("click", function(event) {
     event.preventDefault();
 
-    // YOUR TASK!!!
-    // Code in the logic for storing and retrieving the most recent user.
-    // Don't forget to provide initial data to your Firebase database.
+   //capture values and set them to variables
    var  train = $("#train-name-input").val().trim();
     var destination = $("#destination-input").val().trim();
     var start = $("#start-input").val().trim();
@@ -32,6 +30,8 @@ firebase.initializeApp(config)
       frequency: frequency,
       dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
+
+    //clear values after pushing to database
     $("#train-name-input").val("");
     $("#destination-input").val("");
     $("#start-input").val("");
@@ -49,29 +49,25 @@ firebase.initializeApp(config)
     var firstTime = trainStart;
     
     // First Time (pushed back 1 day to make sure it comes before current time)
-    var firstTimeConverted = moment(firstTime, "HH:mm").subtract(1, "day");
-    console.log(firstTimeConverted);
+    var firstTimeConverted = moment(firstTime, "hh:mm").subtract(1, "day");
     
-    // Current Time
-    var currentTime = moment();
-    console.log("CURRENT TIME: " + moment(currentTime).format("HH:mm"));
     
     // Difference between the times
     var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
-    console.log("DIFFERENCE IN TIME: " + diffTime);
     
-    // Time apart (remainder)
+    // Set remainder time and adjust differnce in time to reflect proper schedule
     var tRemainder = (diffTime-1440) % tFrequency;
-    console.log(tRemainder);
     
-    // Minute Until Train
+    
+    // calculate the time until next train
     var minutesAway = tFrequency - tRemainder;
     console.log("MINUTES TILL TRAIN: " + minutesAway);
     
-    // Next Train
+    // find when the next train will be by adding how far away it is to the current time
     var nextTrain = moment().add(minutesAway, "minutes");
-    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
-                
+    
+     
+    //Append new row of information into each column
     var newRow = $("<tr>").append(
         $("<td>").text(trainName),
         $("<td>").text(trainDestination),
@@ -81,10 +77,10 @@ firebase.initializeApp(config)
     );
     $("#train-table>tbody").append(newRow);
 
-    console.log(trainName)
-    console.log(trainDestination)
-    console.log(tFrequency)
-    console.log(nextTrain)
-    console.log(minutesAway)
+    // console.log(trainName)
+    // console.log(trainDestination)
+    // console.log(tFrequency)
+    // console.log(nextTrain)
+    // console.log(minutesAway)
 
 });
